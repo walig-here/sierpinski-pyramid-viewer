@@ -66,6 +66,7 @@ class Camera:
 
     def refresh(self, display_w, display_h):
         glLoadIdentity()
+        glScalef(self.zoom_level, self.zoom_level, self.zoom_level)
         self.__calculatePosition(self.__getDistance())
         if math.pi/2 <= self.__elevation <= math.pi*3/2:
             self.__up_vector.y = -1
@@ -74,5 +75,3 @@ class Camera:
         gluLookAt(self.__position.x, self.__position.y, self.__position.z,
                   self.__looking_at.x, self.__looking_at.y, self.__looking_at.z,
                   self.__up_vector.x, self.__up_vector.y, self.__up_vector.z)
-
-        glScalef(self.zoom_level, self.zoom_level, self.zoom_level)

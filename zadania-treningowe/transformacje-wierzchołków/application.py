@@ -28,7 +28,7 @@ class Application:
             self.__event_handler.handleEvents()
 
             # Renderowanie
-            pyramid = Pyramid(Vertex(ColorRgb(0,0,0), 0, 0, 0), 1.25)
+            pyramid = Level2Terix(Vertex(ColorRgb(0, 0, 0), 0, 0, 0), 1.25, 8)
             self.__renderer.shapes_to_render.append(pyramid)
             self.__renderer.render(1)
 

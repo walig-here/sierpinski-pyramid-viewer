@@ -51,8 +51,34 @@ class Renderer:
         glEnd()
 
     def drawPyramid(self, pyramid: Pyramid):
-        for line in pyramid.lines:
-            self.drawLine(line)
+        for triangle in pyramid.triangles:
+            self.drawTriangle(triangle)
+
+    def drawLevel2Tetrix(self, tetrix: Level2Terix):
+        # Piramida składowa 1
+        if isinstance(tetrix.subpyramid_1, Pyramid):
+            self.drawPyramid(tetrix.subpyramid_1)
+        else:
+            self.drawLevel2Tetrix(tetrix.subpyramid_1)
+
+        # Piramida składowa 2
+        if isinstance(tetrix.subpyramid_2, Pyramid):
+            self.drawPyramid(tetrix.subpyramid_2)
+        else:
+            self.drawLevel2Tetrix(tetrix.subpyramid_2)
+
+        # Piramida składowa 3
+        if isinstance(tetrix.subpyramid_3, Pyramid):
+            self.drawPyramid(tetrix.subpyramid_3)
+        else:
+            self.drawLevel2Tetrix(tetrix.subpyramid_3)
+
+        # Piramida składowa 4
+        if isinstance(tetrix.subpyramid_4, Pyramid):
+            self.drawPyramid(tetrix.subpyramid_4)
+        else:
+            self.drawLevel2Tetrix(tetrix.subpyramid_4)
+
 
     def render(self, time):
         # Wyczyszczenie buforów kolorów oraz głębi
@@ -72,6 +98,8 @@ class Renderer:
                 self.drawLine(shape)
             elif isinstance(shape, Pyramid):
                 self.drawPyramid(shape)
+            elif isinstance(shape, Level2Terix):
+                self.drawLevel2Tetrix(shape)
         self.shapes_to_render.clear()
 
         # Wyświetlenie ramki
