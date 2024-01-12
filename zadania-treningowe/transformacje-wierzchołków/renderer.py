@@ -10,10 +10,9 @@ class Renderer:
     def __init__(self, frame, backgorund_color: ColorRgb):
         # Stworzenie kamery
         self.viewer = Camera(
-            Vertex(ColorRgb(0,0,0), 0, 0, 0),
-            0.1,
-            25,
-            45
+            frame,
+            Vertex(ColorRgb(0, 0, 0), 0, 0, 0),
+            Vertex(ColorRgb(0, 0, 0), 1, 1, 2)
         )
 
         # Lista kształtów do wyrenderowania
@@ -84,10 +83,6 @@ class Renderer:
         # Wyczyszczenie buforów kolorów oraz głębi
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
 
-        # Ruch kamery
-        self.viewer.rotateRight(0.1)
-        self.viewer.refresh(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
-
         # Renderowanie zleconych primitywów
         for shape in self.shapes_to_render:
             if isinstance(shape, Triangle):
@@ -101,6 +96,13 @@ class Renderer:
             elif isinstance(shape, Level2Terix):
                 self.drawLevel2Tetrix(shape)
         self.shapes_to_render.clear()
+
+        # Ruch kamery
+        self.viewer.refresh(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
+
+        # Ruch obiektu
+        glMatrixMode(GL_MODELVIEW)
+        glRotatef(0.5, 0, 1, 0)  # Obracanie obiektu
 
         # Wyświetlenie ramki
         glFlush()
