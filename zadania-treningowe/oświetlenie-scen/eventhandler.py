@@ -15,8 +15,16 @@ class EventHandler:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.__application.shutdown()
+            if event.type == pygame.KEYDOWN:
+                if event.key == K_n:
+                    self.__renderer.render_normals = not self.__renderer.render_normals
+                elif event.key == K_2:
+                    a = not self.__renderer.point_light.getEnabled()
+                    self.__renderer.point_light.setEnabled(a)
+                elif event.key == K_1:
+                    a = not self.__renderer.directional_light.getEnabled()
+                    self.__renderer.directional_light.setEnabled(a)
 
-        degrees_per_frame = 1
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_w]:
             self.__renderer.viewer.moveForward(0.01)
@@ -34,5 +42,5 @@ class EventHandler:
             self.__renderer.viewer.zoomIn(0.01)
         elif keys_pressed[pygame.K_LCTRL]:
             self.__renderer.viewer.zoomOut(0.01)
-        elif keys_pressed[pygame.K_SPACE]:
+        elif keys_pressed[pygame.K_HOME]:
             self.__renderer.viewer.reset()

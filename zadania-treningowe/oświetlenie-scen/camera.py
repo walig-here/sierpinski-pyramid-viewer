@@ -1,4 +1,5 @@
-from Shapes import Vertex, ColorRgb, crossProcudt3d
+from Shapes import Vertex
+from colors import ColorRgb
 import math
 
 from OpenGL.GL import *
@@ -14,6 +15,9 @@ class Camera:
         self.__position = stands_at_point
         self.zoom_level = 1.0
         self.aspect = frame.get_width()/frame.get_height()
+
+    def getPosition(self):
+        return self.__position
 
     def rotateRight(self, angle_deg: float):
         forward_vec = Vertex(
@@ -102,6 +106,7 @@ class Camera:
     def reset(self):
         self.zoom_level = 1.0
         self.__looking_at = Vertex(0, 0, 0)
+        self.__position = Vertex(0, 0, 2)
 
     def refresh(self, display_w, display_h):
         # Zastosowanie perspektywy oraz zoom'u

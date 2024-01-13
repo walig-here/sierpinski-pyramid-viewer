@@ -22,7 +22,7 @@ class Renderer:
         glBegin(GL_TRIANGLES)
         for vertex in triangle.verticies:
             glColor3ub(vertex.color.red, vertex.color.green, vertex.color.blue)
-            glVertex3f(vertex.x, vertex.y, vertex.z)
+            glVertex3f(vertex.dx, vertex.dy, vertex.dz)
         glEnd()
 
     def render(self, time):

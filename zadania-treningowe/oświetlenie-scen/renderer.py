@@ -1,3 +1,5 @@
+import itertools
+
 from OpenGL.GL import *
 from OpenGL.GLU import *
 import pygame
@@ -6,6 +8,7 @@ from light import *
 from Shapes import *
 from camera import Camera
 
+
 # Mechanizm renderowania obiektów
 class Renderer:
     def __init__(self, frame, backgorund_color: ColorRgb):
@@ -13,7 +16,7 @@ class Renderer:
         self.viewer = Camera(
             frame,
             Vertex(0, 0, 0),
-            Vertex(1, 1, 2)
+            Vertex(0, 0, 2)
         )
 
         # Lista kształtów do wyrenderowania
@@ -31,39 +34,56 @@ class Renderer:
 
         # Definicja meteriału renderowanych obiektów
         self.material = Material(
-            ColorRgb(255, 255, 255),    # kolor ambient
-            ColorRgb(255, 255, 255),    # kolor diffuse
-            ColorRgb(255, 255, 255),    # kolor specular
-            128                         # połyskliwość
+            Light(ColorRgb(255, 255, 255), 1.0),    # kolor ambient
+            Light(ColorRgb(255, 255, 255), 1.0),    # kolor diffuse
+            Light(ColorRgb(255, 255, 255), 1.0),    # kolor specular
+            50.0                                    # połyskliwość
         )
 
         # Włączenie oświetlenia
         glShadeModel(GL_SMOOTH)
         glEnable(GL_LIGHTING)
 
-        # Definicja źródeł światła
-        self.light_source = LightSource(
-            Vertex(-0.5, 1, 2),
-            GL_LIGHT0,
-            ColorRgb(20, 20, 0),
-            ColorRgb(200, 0, 0),
-            ColorRgb(255, 255, 255),
-            1.0,
+        # Definicja źródła światła punktowego
+        self.point_light = PointLight(
+            Vertex(-0.5, 0.1, 0),
+            GL_LIGHT1,
+            Light(ColorRgb(255, 0, 0), 0.01),
+            Light(ColorRgb(255, 0, 0), 0.8),
+            Light(ColorRgb(255, 255, 255), 1.0),
+            0,
             0.05,
-            0.001
+            0.01
         )
-        self.light_source.setEnabled(True)
+        self.point_light.setEnabled(True)
 
-    def drawTriangle(self, triangle : Triangle):
-        # Wyliczenie wektora normalnego
-        normal_vecrtor = getNormalVectorTriangle(triangle)
+        # Definicja źródła światała kierunkowego
+        self.directional_light = DirectionalLight(
+            Vector(Vertex(-1, 0, 0), Vertex(0, 0, 0)),      # biegnie w kierunku
+            GL_LIGHT0,
+            Light(ColorRgb(255, 255, 255), 1.0),                # barwa diffuse
+            Light(ColorRgb(255, 255, 255), 0.01),            # barwa ambient
+            Light(ColorRgb(255, 255, 255), 1.0)             # barwa specular
+        )
+        self.directional_light.setEnabled(True)
 
+        # Czy renderować wektory normalne?
+        self.render_normals = False
+
+    def drawTriangle(self, triangle: Triangle):
         # Rozpoczęce rysowania trójkąta
         glBegin(GL_TRIANGLES)
-        for vertex in triangle.verticies:
-            glNormal3f(normal_vecrtor.x, normal_vecrtor.y, normal_vecrtor.z)
+        for (vertex, normal) in itertools.zip_longest(triangle.verticies, triangle.normals):
+            glNormal3f(normal.dx, normal.dy, normal.dz)
             glVertex3f(vertex.x, vertex.y, vertex.z)
         glEnd()
+
+        if self.render_normals:
+            glBegin(GL_LINES)
+            for normal in triangle.normals:
+                glVertex3f(normal.begin.x, normal.begin.y, normal.begin.z)
+                glVertex3f(normal.end.x, normal.end.y, normal.end.z)
+            glEnd()
 
     def drawPoint(self, vertex: Vertex):
         glBegin(GL_POINTS)
@@ -73,7 +93,7 @@ class Renderer:
     def drawLine(self, line : Line):
         glBegin(GL_LINES)
         for vertex in line.verticies:
-            glVertex3f(vertex.x, vertex.y, vertex.z)
+            glVertex3f(vertex.dx, vertex.dy, vertex.dz)
         glEnd()
 
     def drawPyramid(self, pyramid: Pyramid):
@@ -105,10 +125,16 @@ class Renderer:
         else:
             self.drawLevel2Tetrix(tetrix.subpyramid_4)
 
-
     def render(self, time):
         # Wyczyszczenie buforów kolorów oraz głębi
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+
+        # Ruch kamery
+        self.viewer.refresh(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
+
+        # Ruch obiektu
+        glMatrixMode(GL_MODELVIEW)
+        glRotatef(0.5, 0, 1, 0)  # Obracanie obiektu
 
         # Renderowanie zleconych primitywów
         for shape in self.shapes_to_render:
@@ -124,12 +150,7 @@ class Renderer:
                 self.drawLevel2Tetrix(shape)
         self.shapes_to_render.clear()
 
-        # Ruch kamery
-        self.viewer.refresh(pygame.display.get_surface().get_width(), pygame.display.get_surface().get_height())
 
-        # Ruch obiektu
-        glMatrixMode(GL_MODELVIEW)
-        glRotatef(0.5, 0, 1, 0)  # Obracanie obiektu
 
         # Wyświetlenie ramki
         glFlush()

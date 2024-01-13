@@ -25,7 +25,7 @@ class Renderer:
         glBegin(GL_TRIANGLES)
         for vertex in triangle.verticies:
             glColor3ub(vertex.color.red, vertex.color.green, vertex.color.blue)
-            glVertex3f(vertex.x, vertex.y, vertex.z)
+            glVertex3f(vertex.dx, vertex.dy, vertex.dz)
         glEnd()
 
     def drawPoint(self, vertex: Vertex):
@@ -38,7 +38,7 @@ class Renderer:
         glBegin(GL_LINES)
         for vertex in line.verticies:
             glColor3ub(vertex.color.red, vertex.color.green, vertex.color.blue)
-            glVertex3f(vertex.x, vertex.y, vertex.z)
+            glVertex3f(vertex.dx, vertex.dy, vertex.dz)
         glEnd()
 
     def render(self, time):

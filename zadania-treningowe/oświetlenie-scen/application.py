@@ -1,6 +1,7 @@
 
 from renderer import Renderer
 from Shapes import *
+from colors import ColorRgb
 from eventhandler import EventHandler
 import pygame
 from pygame.locals import *

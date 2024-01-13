@@ -1,28 +1,25 @@
-from dataclasses import  dataclass
+from dataclasses import dataclass
 import math
+from vectors import *
 
 
-@dataclass
-class ColorRgb:
-    red: int
-    green: int
-    blue: int
-
-
-@dataclass
-class Vertex:
-    x: float
-    y: float
-    z: float = 0.0
-
-
-def crossProcudt3d(a: Vertex, b: Vertex):
-    return Vertex(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x)
-
-
-@dataclass
 class Triangle:
-    verticies: [Vertex] * 3
+    def __init__(self, verticies: [Vertex]*3, normal_vector: Vector):
+        self.verticies = verticies
+        self.normals = []
+
+        # Wektor normalny wierzchołka v0
+        self.normals.append(normal_vector)
+
+        # Wektor normalny wierzchołka v1
+        self.normals.append(
+            translate(normal_vector, Vector(verticies[1], verticies[0]))
+        )
+
+        # Wektor normalny wierzchołka v2
+        self.normals.append(
+            translate(normal_vector, Vector(verticies[2], verticies[0]))
+        )
 
 
 @dataclass
@@ -50,21 +47,27 @@ class Pyramid:
             ),
             Vertex(
                 position.x,
-                position.y + piramid_h / 2.0,
-                position.z
+                position.y - piramid_h / 2.0,
+                position.z - sidewall_h * 2.0 / 3.0
             ),
             Vertex(
                 position.x,
-                position.y - piramid_h / 2.0,
-                position.z - sidewall_h * 2.0 / 3.0
+                position.y + piramid_h / 2.0,
+                position.z
             )
         ]
 
+        # Wektory normalne trójkątów
+        normal_v0v1v2 = crossProcudt3d(Vector(v[2], v[0]), Vector(v[1], v[0]))
+        normal_v0v1v3 = crossProcudt3d(Vector(v[1], v[0]), Vector(v[3], v[0]))
+        normal_v0v2v3 = crossProcudt3d(Vector(v[3], v[0]), Vector(v[2], v[0]))
+        normal_v1v2v3 = crossProcudt3d(Vector(v[2], v[1]), Vector(v[3], v[1]))
+
         self.triangles = [
-            Triangle([v[0], v[1], v[2]]),
-            Triangle([v[0], v[1], v[3]]),
-            Triangle([v[0], v[2], v[3]]),
-            Triangle([v[1], v[2], v[3]]),
+            Triangle([v[0], v[1], v[2]], normal_v0v1v2),
+            Triangle([v[0], v[1], v[3]], normal_v0v1v3),
+            Triangle([v[0], v[2], v[3]], normal_v0v2v3),
+            Triangle([v[1], v[2], v[3]], normal_v1v2v3),
         ]
 
 
