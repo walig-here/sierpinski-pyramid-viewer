@@ -31,10 +31,10 @@ class Renderer:
 
         # Definicja meteriału renderowanych obiektów
         self.material = Material(
-            ColorRgb(155, 163, 247),    # kolor ambient
-            ColorRgb(155, 163, 247),    # kolor diffuse
-            ColorRgb(155, 163, 247),    # kolor specular
-            0.1                         # połyskliwość
+            ColorRgb(255, 255, 255),    # kolor ambient
+            ColorRgb(255, 255, 255),    # kolor diffuse
+            ColorRgb(255, 255, 255),    # kolor specular
+            128                         # połyskliwość
         )
 
         # Włączenie oświetlenia
@@ -43,11 +43,11 @@ class Renderer:
 
         # Definicja źródeł światła
         self.light_source = LightSource(
-            Vertex(0.0, 100.0, 0.0),
+            Vertex(-0.5, 1, 2),
             GL_LIGHT0,
-            ColorRgb(0, 0, 0),
-            ColorRgb(0, 0, 0),
-            ColorRgb(0, 0, 0),
+            ColorRgb(20, 20, 0),
+            ColorRgb(200, 0, 0),
+            ColorRgb(255, 255, 255),
             1.0,
             0.05,
             0.001
@@ -55,9 +55,13 @@ class Renderer:
         self.light_source.setEnabled(True)
 
     def drawTriangle(self, triangle : Triangle):
+        # Wyliczenie wektora normalnego
+        normal_vecrtor = getNormalVectorTriangle(triangle)
+
         # Rozpoczęce rysowania trójkąta
         glBegin(GL_TRIANGLES)
         for vertex in triangle.verticies:
+            glNormal3f(normal_vecrtor.x, normal_vecrtor.y, normal_vecrtor.z)
             glVertex3f(vertex.x, vertex.y, vertex.z)
         glEnd()
 

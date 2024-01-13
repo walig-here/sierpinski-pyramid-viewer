@@ -16,6 +16,10 @@ class Vertex:
     z: float = 0.0
 
 
+def crossProcudt3d(a: Vertex, b: Vertex):
+    return Vertex(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x)
+
+
 @dataclass
 class Triangle:
     verticies: [Vertex] * 3
@@ -59,8 +63,8 @@ class Pyramid:
         self.triangles = [
             Triangle([v[0], v[1], v[2]]),
             Triangle([v[0], v[1], v[3]]),
+            Triangle([v[0], v[2], v[3]]),
             Triangle([v[1], v[2], v[3]]),
-            Triangle([v[2], v[2], v[3]])
         ]
 
 

@@ -1,6 +1,26 @@
 from OpenGL.GL import *
 from dataclasses import dataclass
-from Shapes import ColorRgb, Vertex
+from Shapes import ColorRgb, Vertex, crossProcudt3d, Triangle
+import math
+
+
+def getNormalVectorTriangle(triangle: Triangle):
+    ab_vec = Vertex(
+        triangle.verticies[1].x - triangle.verticies[0].x,
+        triangle.verticies[1].y - triangle.verticies[0].y,
+        triangle.verticies[1].z - triangle.verticies[0].z
+    )
+    ac_vec = Vertex(
+        triangle.verticies[2].x - triangle.verticies[0].x,
+        triangle.verticies[2].y - triangle.verticies[0].y,
+        triangle.verticies[2].z - triangle.verticies[0].z
+    )
+    normal_vector = crossProcudt3d(ab_vec, ac_vec)
+    normal_vector_len = math.sqrt(normal_vector.x ** 2 + normal_vector.y ** 2 + normal_vector.z ** 2)
+    normal_vector.x /= normal_vector_len
+    normal_vector.y /= normal_vector_len
+    normal_vector.z /= normal_vector_len
+    return normal_vector
 
 
 # Źródło światła
@@ -50,7 +70,8 @@ class LightSource:
                  [
                     self.position.x,
                     self.position.y,
-                    self.position.z
+                    self.position.z,
+                    1.0
                  ])
 
     # Włączenie/wyłączenie źródła światła
@@ -93,4 +114,4 @@ class Material:
                          1.0
                      ]
                      )
-        glMaterialfv(GL_FRONT, GL_SHININESS, shininess)
+        glMaterialf(GL_FRONT, GL_SHININESS, shininess)

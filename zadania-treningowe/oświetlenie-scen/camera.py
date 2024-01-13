@@ -1,4 +1,4 @@
-from Shapes import Vertex, ColorRgb
+from Shapes import Vertex, ColorRgb, crossProcudt3d
 import math
 
 from OpenGL.GL import *
@@ -21,9 +21,12 @@ class Camera:
             (self.__looking_at.y - self.__position.y),
             (self.__looking_at.z - self.__position.z)
         )
-        self.__looking_at.x = self.__looking_at.x + (forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * angle_deg
-        self.__looking_at.y = self.__looking_at.y - (forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * angle_deg
-        self.__looking_at.z = self.__looking_at.z + (forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * angle_deg
+        self.__looking_at.x = self.__looking_at.x + (
+                    forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * angle_deg
+        self.__looking_at.y = self.__looking_at.y - (
+                    forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * angle_deg
+        self.__looking_at.z = self.__looking_at.z + (
+                    forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * angle_deg
 
     def rotateLeft(self, angle_deg: float):
         forward_vec = Vertex(
@@ -31,9 +34,12 @@ class Camera:
             (self.__looking_at.y - self.__position.y),
             (self.__looking_at.z - self.__position.z)
         )
-        self.__looking_at.x = self.__looking_at.x - (forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * angle_deg
-        self.__looking_at.y = self.__looking_at.y - (forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * angle_deg
-        self.__looking_at.z = self.__looking_at.z - (forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * angle_deg
+        self.__looking_at.x = self.__looking_at.x - (
+                    forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * angle_deg
+        self.__looking_at.y = self.__looking_at.y - (
+                    forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * angle_deg
+        self.__looking_at.z = self.__looking_at.z - (
+                    forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * angle_deg
 
     def moveRight(self, distance: float):
         forward_vec = Vertex(
@@ -41,13 +47,19 @@ class Camera:
             (self.__looking_at.y - self.__position.y),
             (self.__looking_at.z - self.__position.z)
         )
-        self.__looking_at.x = self.__looking_at.x + (forward_vec.y*self.__up_vector.z - forward_vec.z*self.__up_vector.y) * distance
-        self.__looking_at.y = self.__looking_at.y + (forward_vec.y*self.__up_vector.x - forward_vec.x*self.__up_vector.z) * distance
-        self.__looking_at.z = self.__looking_at.z + (forward_vec.x*self.__up_vector.y - forward_vec.y*self.__up_vector.x) * distance
+        self.__looking_at.x = self.__looking_at.x + (
+                    forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * distance
+        self.__looking_at.y = self.__looking_at.y + (
+                    forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * distance
+        self.__looking_at.z = self.__looking_at.z + (
+                    forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * distance
 
-        self.__position.x = self.__position.x + (forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * distance
-        self.__position.y = self.__position.y + (forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * distance
-        self.__position.z = self.__position.z + (forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * distance
+        self.__position.x = self.__position.x + (
+                    forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * distance
+        self.__position.y = self.__position.y + (
+                    forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * distance
+        self.__position.z = self.__position.z + (
+                    forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * distance
 
     def moveLeft(self, distance: float):
         forward_vec = Vertex(
@@ -55,13 +67,19 @@ class Camera:
             (self.__looking_at.y - self.__position.y),
             (self.__looking_at.z - self.__position.z)
         )
-        self.__looking_at.x = self.__looking_at.x - (forward_vec.y*self.__up_vector.z - forward_vec.z*self.__up_vector.y) * distance
-        self.__looking_at.y = self.__looking_at.y - (forward_vec.y*self.__up_vector.x - forward_vec.x*self.__up_vector.z) * distance
-        self.__looking_at.z = self.__looking_at.z - (forward_vec.x*self.__up_vector.y - forward_vec.y*self.__up_vector.x) * distance
+        self.__looking_at.x = self.__looking_at.x - (
+                    forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * distance
+        self.__looking_at.y = self.__looking_at.y - (
+                    forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * distance
+        self.__looking_at.z = self.__looking_at.z - (
+                    forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * distance
 
-        self.__position.x = self.__position.x - (forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * distance
-        self.__position.y = self.__position.y - (forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * distance
-        self.__position.z = self.__position.z - (forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * distance
+        self.__position.x = self.__position.x - (
+                    forward_vec.y * self.__up_vector.z - forward_vec.z * self.__up_vector.y) * distance
+        self.__position.y = self.__position.y - (
+                    forward_vec.y * self.__up_vector.x - forward_vec.x * self.__up_vector.z) * distance
+        self.__position.z = self.__position.z - (
+                    forward_vec.x * self.__up_vector.y - forward_vec.y * self.__up_vector.x) * distance
 
     def moveForward(self, distance: float):
         self.__position.x = self.__position.x + distance * (self.__looking_at.x - self.__position.x)
