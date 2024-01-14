@@ -97,11 +97,13 @@ class Camera:
 
     def zoomIn(self, zoom: float):
         self.zoom_level = self.zoom_level - zoom
+        if self.zoom_level < 0.1:
+            self.zoom_level = 0.1
 
     def zoomOut(self, zoom: float):
         self.zoom_level = self.zoom_level + zoom
-        if self.zoom_level < 0.1:
-            self.zoom_level = 0.1
+        if self.zoom_level > 1:
+            self.zoom_level = 1
 
     def reset(self):
         self.zoom_level = 1.0

@@ -75,6 +75,7 @@ class Renderer:
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+        self.textures_visible = True
 
     def drawTriangle(self, triangle: Triangle):
         # Rozpoczęce rysowania trójkąta
@@ -102,26 +103,35 @@ class Renderer:
             glVertex3f(vertex.dx, vertex.dy, vertex.dz)
         glEnd()
 
+    def enableTextures(self, enable: bool):
+        self.textures_visible = enable
+        if not self.textures_visible:
+            glDisable(GL_TEXTURE_2D)
+        if self.textures_visible:
+            glEnable(GL_TEXTURE_2D)
+
     def drawPyramid(self, pyramid: Pyramid):
         triangle_index = 0
         for triangle in pyramid.triangles:
             # Wyznaczenie koordynatów na teksturze
             texture_coords = [[float]*2]*3
-            if triangle_index == 1:
-                texture_coords = [[0.0, 1.0], [0.5, 1], [0.25, 1 - math.sqrt(3) / 4]]
-            elif triangle_index == 0:
-                texture_coords = [[0.5, 1.0], [0.25, 1 - math.sqrt(3) / 4], [0.75, 1 - math.sqrt(3) / 4]]
-            elif triangle_index == 2:
-                texture_coords = [[0.5, 1.0], [0.75, 1 - math.sqrt(3) / 4], [1, 1]]
-            elif triangle_index == 3:
-                texture_coords = [[0.25, 1 - math.sqrt(3) / 4], [0.75, 1 - math.sqrt(3) / 4], [0.5, math.sqrt(3) / 2]]
-            else:
-                texture_coords = [[0.0, 1.0], [0.5, 1], [0.25, 1 - math.sqrt(3) / 4]]
+            if self.textures_visible:
+                if triangle_index == 1:
+                    texture_coords = [[0.0, 1.0], [0.5, 1], [0.25, 1 - math.sqrt(3) / 4]]
+                elif triangle_index == 0:
+                    texture_coords = [[0.5, 1.0], [0.25, 1 - math.sqrt(3) / 4], [0.75, 1 - math.sqrt(3) / 4]]
+                elif triangle_index == 2:
+                    texture_coords = [[0.5, 1.0], [0.75, 1 - math.sqrt(3) / 4], [1, 1]]
+                elif triangle_index == 3:
+                    texture_coords = [[0.25, 1 - math.sqrt(3) / 4], [0.75, 1 - math.sqrt(3) / 4], [0.5, math.sqrt(3) / 2]]
+                else:
+                    texture_coords = [[0.0, 1.0], [0.5, 1], [0.25, 1 - math.sqrt(3) / 4]]
 
             # Rozpoczęce rysowania trójkąta
             glBegin(GL_TRIANGLES)
             for (vertex, normal, texture_coord) in itertools.zip_longest(triangle.verticies, triangle.normals, texture_coords):
-                glTexCoord2f(texture_coord[0], texture_coord[1])
+                if self.textures_visible:
+                    glTexCoord2f(texture_coord[0], texture_coord[1])
                 glNormal3f(normal.dx, normal.dy, normal.dz)
                 glVertex3f(vertex.x, vertex.y, vertex.z)
             glEnd()
@@ -168,7 +178,7 @@ class Renderer:
 
         # Ruch obiektu
         glMatrixMode(GL_MODELVIEW)
-        glRotatef(0.5, 0, 1, 0)  # Obracanie obiektu
+        glRotatef(0.1, 0, 1, 0)  # Obracanie obiektu
 
         # Renderowanie zleconych primitywów
         for shape in self.shapes_to_render:

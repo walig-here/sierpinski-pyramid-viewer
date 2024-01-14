@@ -24,6 +24,8 @@ class EventHandler:
                 elif event.key == K_1:
                     a = not self.__renderer.directional_light.getEnabled()
                     self.__renderer.directional_light.setEnabled(a)
+                elif event.key == K_t:
+                    self.__renderer.enableTextures(not self.__renderer.textures_visible)
 
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_w]:
