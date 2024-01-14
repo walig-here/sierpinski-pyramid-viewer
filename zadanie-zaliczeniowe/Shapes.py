@@ -14,12 +14,12 @@ class Triangle:
 
         # Wektor normalny wierzchołka v1
         self.normals.append(
-            translate(normal_vector, Vector(verticies[1], verticies[0]))
+            translateVector(normal_vector, Vector(verticies[1], verticies[0]))
         )
 
         # Wektor normalny wierzchołka v2
         self.normals.append(
-            translate(normal_vector, Vector(verticies[2], verticies[0]))
+            translateVector(normal_vector, Vector(verticies[2], verticies[0]))
         )
 
 

@@ -6,7 +6,7 @@ def main():
     if len(sys.argv) > 1:
         tetrix_levels = int(sys.argv[1])
         if tetrix_levels >= 2:
-            app = Application("Tekstury", 800, 800)
+            app = Application("Piramida Sierpińskiego: " + sys.argv[1] + "-poziomowa", 800, 800)
             app.run(tetrix_levels)
 
 

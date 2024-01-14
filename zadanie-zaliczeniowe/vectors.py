@@ -25,6 +25,38 @@ class Vector:
         return math.sqrt(self.dx ** 2 + self.dy ** 2 + self.dz ** 2)
 
 
+def rotateVecrtorHorizointaly(a: Vector, angle_radians: float):
+    result = a
+
+    # Współrzędne wektora
+    result.dx = a.dx * math.cos(angle_radians) + a.dz * math.sin(angle_radians)
+    result.dy = a.dy
+    result.dz = -a.dx * math.sin(angle_radians) + a.dz * math.cos(angle_radians)
+
+    # Punkt końcowy wektora
+    result.end.x = result.begin.x + result.dx
+    result.end.y = result.begin.y + result.dy
+    result.end.z = result.begin.z + result.dz
+
+    return result
+
+
+def rotateVecrtorVertically(a: Vector, angle_radians: float):
+    result = a
+
+    # Współrzędne wektora
+    result.dx = a.dx
+    result.dy = a.dy * math.cos(angle_radians) - a.dz * math.sin(angle_radians)
+    result.dz = a.dy * math.sin(angle_radians) + a.dz * math.cos(angle_radians)
+
+    # Punkt końcowy wektora
+    result.end.x = result.begin.x + result.dx
+    result.end.y = result.begin.y + result.dy
+    result.end.z = result.begin.z + result.dz
+
+    return result
+
+
 def crossProcudt3d(a: Vector, b: Vector):
     result = Vector(a.end, a.begin)
 
@@ -39,7 +71,7 @@ def crossProcudt3d(a: Vector, b: Vector):
     return result
 
 
-def translate(a: Vector, t: Vector):
+def translateVector(a: Vector, t: Vector):
     result = Vector(a.end, a.begin)
 
     result.begin.x = a.begin.x + t.dx

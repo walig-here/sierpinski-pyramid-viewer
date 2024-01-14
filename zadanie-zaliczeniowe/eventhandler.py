@@ -36,13 +36,24 @@ class EventHandler:
             self.__renderer.viewer.moveRight(0.01)
         elif keys_pressed[pygame.K_a]:
             self.__renderer.viewer.moveLeft(0.01)
-        elif keys_pressed[pygame.K_RIGHT]:
-            self.__renderer.viewer.rotateRight(0.01)
-        elif keys_pressed[pygame.K_LEFT]:
-            self.__renderer.viewer.rotateLeft(0.01)
+        elif keys_pressed[pygame.K_SPACE]:
+            self.__renderer.viewer.moveUp(0.01)
         elif keys_pressed[pygame.K_LSHIFT]:
+            self.__renderer.viewer.moveDown(0.01)
+
+        elif keys_pressed[pygame.K_RIGHT]:
+            self.__renderer.viewer.rotateRight(0.5)
+        elif keys_pressed[pygame.K_LEFT]:
+            self.__renderer.viewer.rotateLeft(0.5)
+        elif keys_pressed[pygame.K_UP]:
+            self.__renderer.viewer.rotateUp(0.5)
+        elif keys_pressed[pygame.K_DOWN]:
+            self.__renderer.viewer.rotateDown(0.5)
+
+        elif keys_pressed[pygame.K_q]:
             self.__renderer.viewer.zoomIn(0.01)
-        elif keys_pressed[pygame.K_LCTRL]:
+        elif keys_pressed[pygame.K_e]:
             self.__renderer.viewer.zoomOut(0.01)
+
         elif keys_pressed[pygame.K_HOME]:
             self.__renderer.viewer.reset()
