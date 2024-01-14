@@ -77,32 +77,6 @@ class Renderer:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
         self.textures_visible = True
 
-    def drawTriangle(self, triangle: Triangle):
-        # Rozpoczęce rysowania trójkąta
-        glBegin(GL_TRIANGLES)
-        for (vertex, normal) in itertools.zip_longest(triangle.verticies, triangle.normals):
-            glNormal3f(normal.dx, normal.dy, normal.dz)
-            glVertex3f(vertex.x, vertex.y, vertex.z)
-        glEnd()
-
-        if self.render_normals:
-            glBegin(GL_LINES)
-            for normal in triangle.normals:
-                glVertex3f(normal.begin.x, normal.begin.y, normal.begin.z)
-                glVertex3f(normal.end.x, normal.end.y, normal.end.z)
-            glEnd()
-
-    def drawPoint(self, vertex: Vertex):
-        glBegin(GL_POINTS)
-        glVertex3f(vertex.x, vertex.y, vertex.z)
-        glEnd()
-
-    def drawLine(self, line : Line):
-        glBegin(GL_LINES)
-        for vertex in line.verticies:
-            glVertex3f(vertex.dx, vertex.dy, vertex.dz)
-        glEnd()
-
     def enableTextures(self, enable: bool):
         self.textures_visible = enable
         if not self.textures_visible:
@@ -127,7 +101,7 @@ class Renderer:
                 else:
                     texture_coords = [[0.0, 1.0], [0.5, 1], [0.25, 1 - math.sqrt(3) / 4]]
 
-            # Rozpoczęce rysowania trójkąta
+            # Renderowanie ścian
             glBegin(GL_TRIANGLES)
             for (vertex, normal, texture_coord) in itertools.zip_longest(triangle.verticies, triangle.normals, texture_coords):
                 if self.textures_visible:
@@ -136,6 +110,7 @@ class Renderer:
                 glVertex3f(vertex.x, vertex.y, vertex.z)
             glEnd()
 
+            # Renderowanie wektorów normalnych
             if self.render_normals:
                 glBegin(GL_LINES)
                 for normal in triangle.normals:
@@ -182,13 +157,7 @@ class Renderer:
 
         # Renderowanie zleconych primitywów
         for shape in self.shapes_to_render:
-            if isinstance(shape, Triangle):
-                self.drawTriangle(shape)
-            elif isinstance(shape, Vertex):
-                self.drawPoint(shape)
-            elif isinstance(shape, Line):
-                self.drawLine(shape)
-            elif isinstance(shape, Pyramid):
+            if isinstance(shape, Pyramid):
                 self.drawPyramid(shape)
             elif isinstance(shape, Level2Terix):
                 self.drawLevel2Tetrix(shape)

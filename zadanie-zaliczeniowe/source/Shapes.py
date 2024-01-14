@@ -23,11 +23,6 @@ class Triangle:
         )
 
 
-@dataclass
-class Line:
-    verticies: [Vertex] * 2
-
-
 class Pyramid:
     def __init__(self, position: Vertex, size: float, texture: Image):
         self.texture = texture
